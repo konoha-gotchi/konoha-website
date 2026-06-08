@@ -1,0 +1,77 @@
+.itemContainer {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+}
+
+/* Horizontal line between feed items */
+.itemContainer:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 60px; /* Offset to start after the icon */
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: #eee;
+}
+
+/* Vertical line connecting icons */
+.itemContainer:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 40px;
+    bottom: -25px;
+    width: 2px;
+    background-color: #eee;
+}
+
+.iconWrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Perfect circle from template */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.iconWrapper img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.contentBody {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.textGroup {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.timestamp {
+    font-size: 0.85rem;
+    color: #999;
+    white-space: nowrap;
+}

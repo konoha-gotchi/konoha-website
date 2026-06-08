@@ -1,0 +1,180 @@
+.main {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 60px 20px;
+    padding-bottom: 120px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.header {
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.header p {
+    font-size: 1rem;
+    color: #777;
+}
+
+/* Top Section: Grid layout */
+.topGrid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 900px) {
+    .topGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f0f0f0;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.cardHeader h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toggleGroup {
+    background: #f1f3f5;
+    padding: 4px;
+    border-radius: 10px;
+    display: flex;
+}
+
+.toggleBtn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #888;
+}
+
+.toggleBtn.active {
+    background: #10b981; /* Precise Green */
+    color: white;
+}
+
+.chartWrapper {
+    height: 320px;
+    width: 100%;
+    margin-left: -15px;
+}
+
+/* Weekly Stats Styles */
+.statsList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-radius: 14px;
+}
+
+.statLabel {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.statValue {
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.moisture { background-color: #eff6ff; color: #1d4ed8; }
+.sunlight { background-color: #f5f3ff; color: #6d28d9; }
+.growth { background-color: #f0fdf4; color: #15803d; }
+
+/* Activity Feed Styles */
+.activityCard {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.feedHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.feedHeader h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.filterIcon {
+    width: 22px;
+    height: 22px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.loadMoreBtn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    background: white;
+    border: 1.5px solid #eee;
+    border-radius: 12px;
+    color: #555;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.loadMoreBtn:hover {
+    background: #fafafa;
+    border-color: #ddd;
+}
