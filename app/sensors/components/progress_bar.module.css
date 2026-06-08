@@ -1,0 +1,34 @@
+/* components/ProgressBar.css */
+
+/* ตัวครอบแถบทั้งหมด */
+.progressContainer {
+  width: 100%;             /* ยืดเต็มความกว้างของ Parent */        /* ล็อกความยาวสูงสุดตามที่ต้องการ */
+}
+
+/* แถบพื้นหลัง (สีดำ/เทาเข้ม) */
+.progressTrack {
+  width: 100%;
+  height: 6px;             /* ความหนาของเส้นตรง */
+  background-color: #212121; /* สีพื้นหลังตามรูป */
+  border-radius: 999px;    /* ทำมุมมนทั้งสองข้าง */
+  overflow: hidden;        /* ดักไม่ให้สีส้มล้นขอบมน */
+}
+
+/* แถบวิ่งด้านใน (สีส้ม) */
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease-in-out; /* เพิ่มแอนิเมชันตอนเปอร์เซ็นต์เปลี่ยน */
+}
+
+.increase{
+    background-color: green;
+}
+
+.stable{
+    background-color: gray;
+}
+
+.decrease{
+    background-color: #fca311;
+}
