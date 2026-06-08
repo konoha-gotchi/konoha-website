@@ -1,0 +1,100 @@
+.mainCard{
+    width: 100%;
+    height: 300px;
+    border: 2px solid #eaeaea;   
+    border-radius: 10px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.title{
+    display: flex;
+    width: 100%;
+    height: 25%;
+    justify-content: space-between;
+    align-items: center;
+}
+.title .imgContainer{
+    height: 100%;
+    width: 15%;
+    background-color: lightcoral;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 60%;
+        height: 60%;
+        filter: brightness(0) invert(1);
+    }
+}
+.title .status{
+    padding: 5px 20px;
+    border-radius: 10px;
+}
+
+.mainCard .titleText{
+    color: rgb(95, 95, 95);
+}
+
+.mainCard .stable{
+    color: gray;
+}
+.mainCard .increase{
+    color: lime;
+}
+.mainCard .decrease{
+    color: red
+}
+
+.mainCard .valueContainer{
+    display: flex;
+    gap: .5em;
+}
+
+.mainCard .valueContainer .value1{
+    font-size: xx-large;
+}
+
+.mainCard .valueContainer .value2{
+    align-self: flex-end;
+    margin-bottom: 3px;
+    color: gray;
+}
+
+.good{
+    background-color: lightgreen;
+    color: green;
+}
+
+.low{
+    background-color: lightcoral;
+    color: brown;
+}
+.normal{
+    background-color: rgb(185, 185, 185);
+    color: white;
+}
+
+@media (min-width : 768px) {
+    .mainCard{
+        width: 270px;
+        height: 270px;
+        padding: 15px 30px;
+    }
+        .title .imgContainer{
+        height: 100%;
+        width: 30%;
+        background-color: lightcoral;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+            width: 60%;
+            height: 60%;
+            filter: brightness(0) invert(1);
+        }
+    }
+}

@@ -6,11 +6,12 @@ import FooterNav from "./globals_components/footer";
 export default function Home() {
   return (
    <>
-    <Navbar></Navbar>
+    <Navbar focus={"dashboard"}></Navbar>
     <main className = {styles.main}>
         <DashboardGrid></DashboardGrid>
     </main>
-    <FooterNav></FooterNav>
+    <div className = {styles.thisEmptyBox}></div>
+    <FooterNav focus={"dashboard"}></FooterNav>
    </>
   );
 }

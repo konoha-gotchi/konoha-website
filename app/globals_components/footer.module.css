@@ -27,11 +27,21 @@
             img{
                 width: 1.5em;
                 height: 1.5em;
+                filter: brightness(0) invert(.5);
             }
             p{
                 font-size: small;
             }
         }
+    }
+}
+
+.focus{
+    img{
+        filter: brightness(1) invert(0) !important;
+    }
+    p{
+        color: black;
     }
 }
 

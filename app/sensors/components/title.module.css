@@ -1,0 +1,11 @@
+.title{
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
+        p{
+            font-size: small;
+            color: #888888;
+        }
+    }
+}

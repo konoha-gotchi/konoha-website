@@ -10,6 +10,9 @@ interface LineChartProps {
   data?: DataItem[];
   labelX? : string;
   labelY? : string;
+  domain?: [number, number];
+  strokColor? : string;
+  fillColor? : string;
 }
 
 
@@ -39,7 +42,8 @@ interface LineChartProps {
     y: 90,
   },
 ];
-export default function LineChartGraph( { data = mockData ,labelX = "Label-X", labelY = "Label-Y" }: LineChartProps,  ){
+export default function LineChartGraph( { data = mockData ,labelX = "Label-X", labelY = "Label-Y"
+    , domain = [0,100], strokColor = "#FFB433", fillColor ="#FCCD2A" }: LineChartProps,  ){
 
 
     return(
@@ -69,7 +73,7 @@ export default function LineChartGraph( { data = mockData ,labelX = "Label-X", l
                         }}
                     > </XAxis>
                     <YAxis 
-                        domain={[0, 800]} 
+                        domain={domain} 
                         tick={{ fill: '#8a8885', fontSize: 13, fontFamily: 'sans-serif' }}
                         axisLine={false}
                         tickLine={false}
@@ -84,7 +88,7 @@ export default function LineChartGraph( { data = mockData ,labelX = "Label-X", l
                         }}
                     />
                     <Tooltip />
-                    <Area type="monotone" dataKey="y" stroke="#FFB433" fill="#FCCD2A" 
+                    <Area type="monotone" dataKey="y" stroke={strokColor} fill={fillColor} 
                         strokeWidth={3} dot = {true} dy={10}
                     />
                 </AreaChart>
