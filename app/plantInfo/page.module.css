@@ -1,0 +1,263 @@
+.main {
+    flex: 1;
+    background-color: white;
+    padding: 60px 20px;
+    padding-bottom: 120px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.header {
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.header p {
+    font-size: 1rem;
+    color: #777;
+}
+
+/* Base Card Style */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Plant Identity Card */
+.identityCard {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.imageSection {
+    width: 100%;
+    max-width: 300px;
+    align-self: center;
+}
+
+.imageSection img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.infoSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.plantName h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 4px;
+}
+
+.species {
+    font-size: 1.1rem;
+    color: #10b981;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.description {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.metaInfo {
+    display: flex;
+    gap: 20px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 20px;
+}
+
+.metaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metaLabel {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.metaValue {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 700;
+}
+
+/* Optimal Conditions Grid */
+.sectionTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.conditionsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.conditionCard {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 18px;
+    transition: transform 0.2s;
+}
+
+.conditionCard:hover {
+    transform: translateY(-5px);
+}
+
+.conditionHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.iconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconBox img {
+    width: 20px;
+    height: 20px;
+}
+
+.conditionTitle {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.rangeBox {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.rangeLabel {
+    display: block;
+    font-size: 0.75rem;
+    color: inherit;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.rangeValue {
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+/* Color Themes for Conditions */
+.moistureCard { background-color: #eff6ff; color: #1d4ed8; }
+.moistureCard .iconBox { background-color: #dbeafe; }
+
+.sunlightCard { background-color: #fffbeb; color: #b45309; }
+.sunlightCard .iconBox { background-color: #fef3c7; }
+
+.tempCard { background-color: #fef2f2; color: #b91c1c; }
+.tempCard .iconBox { background-color: #fee2e2; }
+
+.humidityCard { background-color: #f0fdf4; color: #15803d; }
+.humidityCard .iconBox { background-color: #dcfce7; }
+
+/* Guidelines Card */
+.guidelinesList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.guidelineItem {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 15px;
+}
+
+.guidelineItem:not(:last-child) {
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    margin-top: 8px;
+    flex-shrink: 0;
+}
+
+.guidelineText strong {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.guidelineText p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+    .identityCard {
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 40px;
+    }
+
+    .imageSection {
+        max-width: 350px;
+    }
+
+    .infoSection {
+        padding-left: 40px;
+    }
+
+    .conditionsGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

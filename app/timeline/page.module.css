@@ -1,6 +1,6 @@
 .main {
     flex: 1;
-    background-color: #f8f9fa;
+    background-color: white;
     padding: 60px 20px;
     padding-bottom: 120px;
     min-height: 100vh;
@@ -88,7 +88,7 @@
 }
 
 .toggleBtn.active {
-    background: #10b981; /* Precise Green */
+    background: #10b981;
     color: white;
 }
 

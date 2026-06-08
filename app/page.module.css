@@ -1,28 +1,22 @@
-.main{
-  width: 100%;
-  height: 100vh;
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.main {
+    flex: 1;
+    background-color: white;
+    padding: 60px 20px;
+    padding-bottom: 120px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 
-.emptyBox{
-  display: block;
-  width: 100%;
-  height: 80px;
+/* This is a helper to ensure enough scroll space on mobile if needed */
+.emptyBox {
+    display: block;
+    width: 100%;
+    height: 80px;
 }
 
-.thisEmptyBox{
-  display: block;
-  width: 100%;
-  height: 600px;
-}
 @media (min-width: 768px) {
-  .emptyBox{
-    height: 50px;
-  }
-  .thisEmptyBox{
-    display: none;
-  }
+    .emptyBox {
+        display: none;
+    }
 }

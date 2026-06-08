@@ -10,7 +10,6 @@ export default function Home() {
     <main className = {styles.main}>
         <DashboardGrid></DashboardGrid>
     </main>
-    <div className = {styles.thisEmptyBox}></div>
     <FooterNav focus={"dashboard"}></FooterNav>
    </>
   );

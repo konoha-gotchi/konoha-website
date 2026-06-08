@@ -5,13 +5,13 @@ import styles from "./page.module.css"
 import Navbar from "../globals_components/navbar"
 import FooterNav from "../globals_components/footer"
 
-// เรียกใช้กราฟที่มีอยู่ตามคำสั่ง
+// Use existing graph component
 import LineChartGraph from "../sensors/components/area_chart"
 import TimelineItem from "./components/timeline_item"
 
 export default function Timeline(){
     
-    // ข้อมูลกราฟสีเขียว (Plant Health History)
+    // Plant Health History mock data
     const healthHistoryData = [
         { x: 'Mon', y: 45 },
         { x: 'Tue', y: 42 },
@@ -22,35 +22,42 @@ export default function Timeline(){
         { x: 'Sun', y: 75 },
     ];
 
-    // ข้อมูล Activity Feed ตาม Template เป๊ะๆ
-    const activityFeed = [
+    // Event logs mock data for tracking anomalies and changes
+    const eventLogs = [
         {
-            title: "Moisture sensor reading logged",
-            description: "Sensor #KH-01 recorded a level of 62%, well within optimal parameters.",
-            timestamp: "3 min ago",
-            iconUrl: "/icon/sensor.png",
-            iconBgColor: "#4CAF50" // Green
-        },
-        {
-            title: "Light exposure peak recorded",
-            description: "Peak photosynthesis window reached. UV index was at moderate levels (3.4).",
-            timestamp: "1 hr ago",
-            iconUrl: "/icon/sun.png",
-            iconBgColor: "#81D4FA" // Light Blue
-        },
-        {
-            title: "Watered by user",
-            description: "Manual watering event triggered via mobile app. 250ml added.",
-            timestamp: "2 days ago",
+            title: "Critical: Low Soil Moisture",
+            description: "Soil moisture dropped to 15% (Threshold: 25%). Emergency watering triggered.",
+            timestamp: "10 min ago",
             iconUrl: "/icon/water-droplet.png",
-            iconBgColor: "#EF9A9A" // Red/Pink
+            iconBgColor: "#FFEBEE" // Critical alert color
         },
         {
-            title: "Health state updated to \"good\"",
-            description: "AI analysis confirmed successful adaptation to new soil nutrients.",
-            timestamp: "3 days ago",
+            title: "Temperature Anomaly",
+            description: "Unexpected temperature spike detected (38°C). Environment cooling initiated.",
+            timestamp: "2 hr ago",
+            iconUrl: "/icon/thermometer.png",
+            iconBgColor: "#FFF3E0" // Warning color
+        },
+        {
+            title: "Growth Milestone Reached",
+            description: "Height increase of 0.5cm detected since last scan. Overall health is improving.",
+            timestamp: "5 hr ago",
             iconUrl: "/icon/leaves.png",
-            iconBgColor: "#C8E6C9" // Pale Green
+            iconBgColor: "#E8F5E9" // Positive color
+        },
+        {
+            title: "Sensor Calibration Success",
+            description: "Moisture sensor #KH-01 successfully calibrated to new soil density.",
+            timestamp: "1 day ago",
+            iconUrl: "/icon/sensor.png",
+            iconBgColor: "#E3F2FD" // Info color
+        },
+        {
+            title: "Health Status: Stable",
+            description: "Weekly AI analysis complete. Plant shows high adaptation to current light levels.",
+            timestamp: "2 days ago",
+            iconUrl: "/icon/protect.png",
+            iconBgColor: "#F3E5F5" // Status update color
         }
     ];
 
@@ -61,13 +68,13 @@ export default function Timeline(){
             <main className={styles.main}>
                 <div className={styles.container}>
                     
-                    {/* Header: Timeline & Subtitle */}
+                    {/* Header Section */}
                     <header className={styles.header}>
                         <h1>Timeline</h1>
-                        <p>Health history and activity log for your digital companion.</p>
+                        <p>Detailed event logs and historical health tracking.</p>
                     </header>
 
-                    {/* Top Grid: Plant Health History (Graph) & Weekly Stats */}
+                    {/* Top Section: Health History & Weekly Stats */}
                     <div className={styles.topGrid}>
                         
                         {/* 1. Plant Health History Card */}
@@ -84,8 +91,8 @@ export default function Timeline(){
                                     labelX="Day" 
                                     labelY="Health (%)" 
                                     domain={[0, 100]}
-                                    strokColor="#10b981" // เขียวเข้ม
-                                    fillColor="rgba(16, 185, 129, 0.1)" // เขียวจางๆ
+                                    strokColor="#10b981" // Dark green
+                                    fillColor="rgba(16, 185, 129, 0.1)" // Light green background
                                 />
                             </div>
                         </section>
@@ -115,10 +122,10 @@ export default function Timeline(){
                         </section>
                     </div>
 
-                    {/* Bottom Section: Activity Feed Card */}
+                    {/* Bottom Section: Event Logs */}
                     <section className={styles.activityCard}>
                         <div className={styles.feedHeader}>
-                            <h2>Activity Feed</h2>
+                            <h2>Event logs</h2>
                             {/* Filter Icon Placeholder */}
                             <div className={styles.filterIcon}>
                                 <div style={{width: '20px', height: '2px', background: '#333', marginBottom: '4px'}}></div>
@@ -128,7 +135,7 @@ export default function Timeline(){
                         </div>
 
                         <div className={styles.feedList}>
-                            {activityFeed.map((item, index) => (
+                            {eventLogs.map((item, index) => (
                                 <TimelineItem 
                                     key={index}
                                     title={item.title}
@@ -140,9 +147,8 @@ export default function Timeline(){
                             ))}
                         </div>
 
-                        {/* Button as per Template */}
                         <button className={styles.loadMoreBtn}>
-                            Load Older Events
+                            Load Older Logs
                         </button>
                     </section>
 

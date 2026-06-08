@@ -31,7 +31,7 @@
 .iconWrapper {
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Perfect circle from template */
+    border-radius: 50%; /* Circular shape */
     display: flex;
     align-items: center;
     justify-content: center;
