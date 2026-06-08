@@ -21,7 +21,7 @@ export default function Navbar({focus} : Props) {
    <>
     <nav className={styles.navbar}>
         <section className={styles.navbarLogo}>
-            <img src={"/icon/logo.png"} alt={"logo"}></img>
+            <img src={"/icon/app.png"} alt={"logo"}></img>
             <h3>Konoha Gotchi</h3>
         </section>
         <section className={styles.navbarList}>
