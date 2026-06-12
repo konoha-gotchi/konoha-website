@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Konoha-gotchi Dashboard
 
-## Getting Started
+Next.js dashboard for the Konoha-gotchi smart planter class prototype.
 
-First, run the development server:
+The dashboard reads plant sensor data from Supabase, shows current values and recent charts, and calls a server-side API route to generate Gemini plant messages. Secret keys are used only on the server.
+
+## Environment Variables
+
+Copy the example file:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Required for live data:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+GEMINI_API_KEY=your-google-ai-studio-key
+GEMINI_MODEL=gemini-2.5-flash
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Only `NEXT_PUBLIC_SUPABASE_URL` is browser-safe. Do not add `NEXT_PUBLIC_` to the Supabase service role key or Gemini key.
 
-## Learn More
+If Supabase is not configured or has no readings yet, the dashboard displays mock prototype data so the UI can still be reviewed.
 
-To learn more about Next.js, take a look at the following resources:
+## Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run build
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open `http://localhost:3000`.
 
-## Deploy on Vercel
+## Supabase Tables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Run the migration in the hardware repo:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+../plant-node/supabase/migrations/001_konoha_schema.sql
+```
+
+The dashboard expects:
+
+- `plant_readings`
+- `plant_ai_reports`
+
+## Gemini Route
+
+`POST /api/plant-ai-report`:
+
+1. Reads latest and recent readings from Supabase.
+2. Computes simple rule-based analysis and prediction.
+3. Sends a short structured prompt to Gemini if `GEMINI_API_KEY` is present.
+4. Stores the report in `plant_ai_reports`.
+5. Returns the saved report.
+
+If Gemini is not configured, the route falls back to the rule-based message shape.
+
+## Deployment
+
+Set the same environment variables in Vercel project settings, then deploy normally. The existing dashboard design is preserved; live data is loaded server-side on the dashboard and sensors pages.

@@ -4,7 +4,7 @@ import styles from "./progress_bar.module.css"
 
 interface ProgressBarProps {
   value: number; 
-  color : "green" | "orage" | "gray"
+  color : "green" | "orange" | "gray"
 }
 
 

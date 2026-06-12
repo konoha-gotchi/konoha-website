@@ -31,9 +31,9 @@ export default function SensorsCard({level,iconUrl,title,value,unit, color , dif
                     <p className={styles.value2}>{unit}</p>
                 </div>
                 <p className={`${styles.description} ${diffValue == 0 ? styles.stable: diffValue > 0 ? styles.increase : styles.decrease  }`}>
-                   {diffValue == 0 ? "" : diffValue > 0 ? "+": "-"} {Math.abs(diffValue) == 0 ? "": Math.abs(diffValue) } {diffValue == 0 ? "- Stable to day": "% from yesterday"}
+                   {diffValue == 0 ? "Stable today" : `${diffValue > 0 ? "+" : "-"} ${Math.abs(diffValue)} recent change`}
                 </p>
-                <ProgressBar value={Math.abs(diffValue)} color={diffValue == 0 ? "gray" : diffValue > 0 ? "green": "orage"}></ProgressBar>
+                <ProgressBar value={Math.abs(diffValue)} color={diffValue == 0 ? "gray" : diffValue > 0 ? "green": "orange"}></ProgressBar>
             </div>  
         </>
     )
