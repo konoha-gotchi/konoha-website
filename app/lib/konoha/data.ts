@@ -23,7 +23,7 @@ export async function fetchDashboardDataFromSupabase(windowMinutes = 360): Promi
       .from("plant_readings")
       .select(READING_COLUMNS)
       .gte("created_at", since)
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: false })
       .limit(200),
     supabase
       .from("plant_ai_reports")
@@ -45,7 +45,7 @@ export async function fetchDashboardDataFromSupabase(windowMinutes = 360): Promi
 
   return {
     latestReading: (latestResult.data as PlantReading | null) ?? null,
-    readings: (historyResult.data as PlantReading[] | null) ?? [],
+    readings: ((historyResult.data as PlantReading[] | null) ?? []).reverse(),
     latestReport: (reportResult.data as PlantAiReport | null) ?? null,
     usingMockData: false,
   };

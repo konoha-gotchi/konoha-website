@@ -19,9 +19,11 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 GEMINI_API_KEY=your-google-ai-studio-key
 GEMINI_MODEL=gemini-2.5-flash
+KONOHA_REPORT_TOKEN=choose-a-small-shared-demo-token
 ```
 
 Only `NEXT_PUBLIC_SUPABASE_URL` is browser-safe. Do not add `NEXT_PUBLIC_` to the Supabase service role key or Gemini key.
+`KONOHA_REPORT_TOKEN` is a simple class-demo guard for the manual message-generation button; enter the same token in the browser when prompted.
 
 If Supabase is not configured or has no readings yet, the dashboard displays mock prototype data so the UI can still be reviewed.
 
@@ -52,11 +54,12 @@ The dashboard expects:
 
 `POST /api/plant-ai-report`:
 
-1. Reads latest and recent readings from Supabase.
-2. Computes simple rule-based analysis and prediction.
-3. Sends a short structured prompt to Gemini if `GEMINI_API_KEY` is present.
-4. Stores the report in `plant_ai_reports`.
-5. Returns the saved report.
+1. Requires `x-konoha-report-token` or `Authorization: Bearer ...` matching `KONOHA_REPORT_TOKEN`.
+2. Reads latest and recent readings from Supabase.
+3. Computes simple rule-based analysis and prediction.
+4. Sends a short structured prompt to Gemini if `GEMINI_API_KEY` is present.
+5. Stores the report in `plant_ai_reports`.
+6. Returns the saved report.
 
 If Gemini is not configured, the route falls back to the rule-based message shape.
 

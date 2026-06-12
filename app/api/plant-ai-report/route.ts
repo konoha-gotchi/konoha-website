@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 
 import { analyzePlant } from "@/app/lib/konoha/analysis";
 import { fetchDashboardDataFromSupabase } from "@/app/lib/konoha/data";
@@ -57,6 +58,35 @@ function parseGeminiJson(text: string): GeminiReport | null {
   }
 }
 
+function constantTimeEquals(a: string, b: string): boolean {
+  const aBuffer = Buffer.from(a);
+  const bBuffer = Buffer.from(b);
+
+  if (aBuffer.length !== bBuffer.length) {
+    return false;
+  }
+
+  return timingSafeEqual(aBuffer, bBuffer);
+}
+
+function assertReportAuthorized(request: Request): NextResponse | null {
+  const configuredToken = process.env.KONOHA_REPORT_TOKEN;
+  if (!configuredToken) {
+    return NextResponse.json({ error: "KONOHA_REPORT_TOKEN is not configured." }, { status: 503 });
+  }
+
+  const requestToken =
+    request.headers.get("x-konoha-report-token") ||
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
+    "";
+
+  if (!requestToken || !constantTimeEquals(requestToken, configuredToken)) {
+    return NextResponse.json({ error: "Invalid report token." }, { status: 401 });
+  }
+
+  return null;
+}
+
 async function generateGeminiReport(ruleAnalysis: ReturnType<typeof analyzePlant>) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -95,8 +125,13 @@ async function generateGeminiReport(ruleAnalysis: ReturnType<typeof analyzePlant
   return parseGeminiJson(response.text ?? "") ?? fallbackReport(ruleAnalysis, "gemini_parse_fallback");
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
+    const authorizationError = assertReportAuthorized(request);
+    if (authorizationError) {
+      return authorizationError;
+    }
+
     const windowMinutes = 360;
     const dashboardData = await fetchDashboardDataFromSupabase(windowMinutes);
 

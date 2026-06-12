@@ -16,14 +16,29 @@ export default function GenerateReportButton({ buttonClassName, statusClassName 
     setMessage("");
 
     try {
+      let reportToken = window.sessionStorage.getItem("konohaReportToken") ?? "";
+      if (!reportToken) {
+        reportToken = window.prompt("Enter plant report token")?.trim() ?? "";
+      }
+      if (!reportToken) {
+        throw new Error("Report token is required.");
+      }
+
       const response = await fetch("/api/plant-ai-report", {
         method: "POST",
+        headers: {
+          "x-konoha-report-token": reportToken,
+        },
       });
       const body = await response.json();
       if (!response.ok) {
+        if (response.status === 401) {
+          window.sessionStorage.removeItem("konohaReportToken");
+        }
         throw new Error(body?.error || "Could not generate message.");
       }
 
+      window.sessionStorage.setItem("konohaReportToken", reportToken);
       setState("done");
       setMessage("New plant message saved.");
       window.setTimeout(() => window.location.reload(), 700);
