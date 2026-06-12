@@ -4,18 +4,18 @@ import styles from "./progress_bar.module.css"
 
 interface ProgressBarProps {
   value: number; 
-  color : "green" | "orage" | "gray"
+  trend: "increase" | "decrease" | "stable";
 }
 
 
-export default function ProgressBar({ value = 0, color = "gray" }: ProgressBarProps) {
+export default function ProgressBar({ value = 0, trend = "stable" }: ProgressBarProps) {
   const validatedValue = Math.min(Math.max(value, 0), 100);
 
   return (
     <div className={styles.progressContainer}>
       <div className={styles.progressTrack}>
         <div 
-          className={`${styles.progressFill} ${color == "gray" ? styles.stable : color == "green" ? styles.increase : styles.decrease}`} 
+          className={`${styles.progressFill} ${styles[trend]}`}
           style={{ width: `${validatedValue}%` }} 
         />
       </div>

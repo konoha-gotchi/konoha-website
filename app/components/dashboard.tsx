@@ -1,30 +1,24 @@
-"use client"
-import { useState } from "react";
+import { mockDashboardData } from "../data/mock_data";
 import styles from "./dashboard.module.css";
+import type { SensorMetricLevel, SensorMetricSummary } from "../types/plant";
 
-interface plantTag {
-    health: string;
-    moise: string;
-    light: string;
-}
+const statusClassByLevel: Record<SensorMetricLevel, string> = {
+    Low: styles.colorLow,
+    Normal: styles.colorNormal,
+    Good: styles.colorGood,
+};
 
-interface sensorsPercentage {
-    moise: number;
-    light: number;
-    temperature: number;
-    humidity: number;
-}
+const formatMetricValue = (metric: SensorMetricSummary) => {
+    const separator = metric.unit === "lux" ? " " : "";
+    return `${metric.value}${separator}${metric.unit}`;
+};
 
 export default function DashboardGrid() {
-    const [plantName] = useState("Kono-Chan")
-    const [descript] = useState("I'm feeling good today!")
-    const [plantTag] = useState<plantTag>({ health: "Good", moise: "Succulent", light: "Full sun" })
-    const [sensorsPercentage] = useState<sensorsPercentage>({ moise: 34, light: 820, temperature: 22, humidity: 48 })
-    const [min] = useState(3);
+    const dashboardData = mockDashboardData;
+    const displayedMetrics = dashboardData.sensorMetrics.slice(0, 4);
 
-    const percentage = 85;
     const strokeDasharray = 251.3;
-    const strokeDashoffset = strokeDasharray - (strokeDasharray * percentage) / 100;
+    const strokeDashoffset = strokeDasharray - (strokeDasharray * dashboardData.plant_hp_percent) / 100;
 
     return (
         <section className={styles.dashboardGrid}>
@@ -32,31 +26,25 @@ export default function DashboardGrid() {
             {/* Header Section */}
             <div className={`${styles.headerCell} ${styles.card}`}>
                 <section className={styles.profile}>
-                    <img src="./icon/mockplant.jpeg" alt="plant-img" />
+                    <img src={dashboardData.plant.imagePath} alt={dashboardData.plant.name} />
                 </section>
                 
                 <section className={styles.info}>
-                    <h3>{plantName}</h3>
-                    <p><i>{`"${descript}"`}</i></p>
+                    <h3>{dashboardData.plant.name}</h3>
+                    <p><i>{`"${dashboardData.ai_report.plant_message}"`}</i></p>
 
                     <div className={styles.infoTag}>
-                        <div>
-                            <img src="./icon/protect.png" alt="tag-icon" />
-                            <p>Health: {plantTag.health}</p>
-                        </div>
-                        <div>
-                            <img src="./icon/leaves.png" alt="tag-icon" />
-                            <p>Moisture: {plantTag.moise}</p>
-                        </div>
-                        <div>
-                            <img src="./icon/sun.png" alt="tag-icon" />
-                            <p>Light: {plantTag.light}</p>
-                        </div>
+                        {dashboardData.plantTags.map((tag) => (
+                            <div key={tag.label}>
+                                <img src={tag.iconPath} alt="" />
+                                <p>{tag.label}: {tag.value}</p>
+                            </div>
+                        ))}
                     </div>
 
                     <div className={styles.lastUpdate}>
-                        <img src="./icon/refresh.png" alt="refresh-img" />
-                        <p>Last updated {min} min ago</p>
+                        <img src="/icon/refresh.png" alt="" />
+                        <p>Last updated {dashboardData.last_updated_label}</p>
                     </div>
                 </section>
                 
@@ -70,7 +58,7 @@ export default function DashboardGrid() {
                         </svg>
                         
                         <div className={styles.progressText}>
-                            <span className={styles.percentage}>{`${percentage}%`}</span>
+                            <span className={styles.percentage}>{`${dashboardData.plant_hp_percent}%`}</span>
                             <span className={styles.label}>Plant HP</span>
                         </div>
                     </div>
@@ -85,34 +73,21 @@ export default function DashboardGrid() {
                     <h3 className={styles.cardTitle}>Mood & Sensors</h3>
 
                     <section className={styles.moodSection}>
-                        <p className={styles.emoji}>🤩</p>
+                        <p className={styles.emoji}>{dashboardData.mood.emoji}</p>
                         <div className={styles.moodInfo}>
-                            <h3>Happy</h3>
-                            <p><i>Thriving and content</i></p>
+                            <h3>{dashboardData.mood.label}</h3>
+                            <p><i>{dashboardData.mood.description}</i></p>
                         </div>
                     </section>
 
                     <section className={styles.subGridMidLeft}>
-                        <div className={styles.sensorItem}>
-                            <p className={styles.sensorLabel}>Soil moisture</p>
-                            <h6 className={styles.sensorValue}>{sensorsPercentage.moise}%</h6>
-                            <p className={`${styles.statusText} ${styles.colorLow}`}>Low</p>
-                        </div>
-                        <div className={styles.sensorItem}>
-                            <p className={styles.sensorLabel}>Light level</p>
-                            <h6 className={styles.sensorValue}>{sensorsPercentage.light} lux</h6>
-                            <p className={`${styles.statusText} ${styles.colorGood}`}>Good</p>
-                        </div>
-                        <div className={styles.sensorItem}>
-                            <p className={styles.sensorLabel}>Temperature</p>
-                            <h6 className={styles.sensorValue}>{sensorsPercentage.temperature}°C</h6>
-                            <p className={`${styles.statusText} ${styles.colorNormal}`}>Normal</p>
-                        </div>
-                        <div className={styles.sensorItem}>
-                            <p className={styles.sensorLabel}>Air humidity</p>
-                            <h6 className={styles.sensorValue}>{sensorsPercentage.humidity}%</h6>
-                            <p className={`${styles.statusText} ${styles.colorLow}`}>Low</p>
-                        </div>
+                        {displayedMetrics.map((metric) => (
+                            <div className={styles.sensorItem} key={metric.key}>
+                                <p className={styles.sensorLabel}>{metric.label}</p>
+                                <h6 className={styles.sensorValue}>{formatMetricValue(metric)}</h6>
+                                <p className={`${styles.statusText} ${statusClassByLevel[metric.level]}`}>{metric.level}</p>
+                            </div>
+                        ))}
                     </section>
                 </div>
 
@@ -121,41 +96,25 @@ export default function DashboardGrid() {
                     <h3 className={styles.cardTitle}>Recent activity</h3>
                     
                     <div className={styles.logList}>
-                        <section className={styles.logItem}>
-                            <div className={styles.dot}></div>
-                            <p className={styles.logText}>Moisture sensor reading logged</p>
-                            <p className={styles.logTime}>3 min ago</p>
-                        </section>
-
-                        <section className={styles.logItem}>
-                            <div className={styles.dot}></div>
-                            <p className={styles.logText}>Light exposure peak recorded</p>
-                            <p className={styles.logTime}>1 hr ago</p>
-                        </section>
-
-                        <section className={styles.logItem}>
-                            <div className={styles.dot}></div>
-                            <p className={styles.logText}>Watered by user</p>
-                            <p className={styles.logTime}>2 days ago</p>
-                        </section>
-
-                        <section className={styles.logItem}>
-                            <div className={styles.dot}></div>
-                            <p className={styles.logText}>Health state updated to "good"</p>
-                            <p className={styles.logTime}>3 days ago</p>
-                        </section>
+                        {dashboardData.recentActivity.map((activity) => (
+                            <section className={styles.logItem} key={`${activity.title}-${activity.timestampLabel}`}>
+                                <div className={styles.dot}></div>
+                                <p className={styles.logText}>{activity.title}</p>
+                                <p className={styles.logTime}>{activity.timestampLabel}</p>
+                            </section>
+                        ))}
                     </div>
                 </div>
             </div>
 
             {/* Bottom Section: Care Advice */}
             <div className={`${styles.bottom} ${styles.card}`}>
-                <img src="./icon/water.jpeg" alt="water-img" />
+                <img src={dashboardData.careAdvice.imagePath} alt="" />
                 <section className={styles.careAdvice}>
-                    <h6>Care advice</h6>
-                    <p>Soil moisture is slightly low. Please water Kono-Chan within today to keep her happy and healthy.</p>
+                    <h6>{dashboardData.careAdvice.title}</h6>
+                    <p>{dashboardData.careAdvice.body}</p>
                     <button className={styles.markBtn}>
-                        Mark as Watered
+                        {dashboardData.careAdvice.actionLabel}
                     </button>
                 </section>
             </div>
