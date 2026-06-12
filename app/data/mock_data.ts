@@ -164,8 +164,8 @@ export const mockDashboardData: DashboardData = {
     plant: plantProfile,
     plantTags: [
         { label: "Health", value: "Good", iconPath: "/icon/protect.png" },
-        { label: "Moisture", value: "Succulent", iconPath: "/icon/leaves.png" },
-        { label: "Light", value: "Full sun", iconPath: "/icon/sun.png" },
+        { label: "Soil moisture", value: "Succulent", iconPath: "/icon/leaves.png" },
+        { label: "Light level", value: "Full sun", iconPath: "/icon/sun.png" },
     ],
     plant_status: "Good",
     plant_hp_percent: 85,
