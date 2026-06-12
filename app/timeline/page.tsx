@@ -1,65 +1,13 @@
-"use client"
-
-import React from 'react';
 import styles from "./page.module.css"
 import Navbar from "../globals_components/navbar"
 import FooterNav from "../globals_components/footer"
 
-// Use existing graph component
-import LineChartGraph from "../sensors/components/area_chart"
+import { mockTimelineData } from "../data/mock_data"
+import AreaChartGraph from "../sensors/components/area_chart"
 import TimelineItem from "./components/timeline_item"
 
 export default function Timeline(){
-    
-    // Plant Health History mock data
-    const healthHistoryData = [
-        { x: 'Mon', y: 45 },
-        { x: 'Tue', y: 42 },
-        { x: 'Wed', y: 55 },
-        { x: 'Thu', y: 65 },
-        { x: 'Fri', y: 78 },
-        { x: 'Sat', y: 80 },
-        { x: 'Sun', y: 75 },
-    ];
-
-    // Event logs mock data for tracking anomalies and changes
-    const eventLogs = [
-        {
-            title: "Critical: Low Soil Moisture",
-            description: "Soil moisture dropped to 15% (Threshold: 25%). Emergency watering triggered.",
-            timestamp: "10 min ago",
-            iconUrl: "/icon/water-droplet.png",
-            iconBgColor: "#FFEBEE" // Critical alert color
-        },
-        {
-            title: "Temperature Anomaly",
-            description: "Unexpected temperature spike detected (38°C). Environment cooling initiated.",
-            timestamp: "2 hr ago",
-            iconUrl: "/icon/thermometer.png",
-            iconBgColor: "#FFF3E0" // Warning color
-        },
-        {
-            title: "Growth Milestone Reached",
-            description: "Height increase of 0.5cm detected since last scan. Overall health is improving.",
-            timestamp: "5 hr ago",
-            iconUrl: "/icon/leaves.png",
-            iconBgColor: "#E8F5E9" // Positive color
-        },
-        {
-            title: "Sensor Calibration Success",
-            description: "Moisture sensor #KH-01 successfully calibrated to new soil density.",
-            timestamp: "1 day ago",
-            iconUrl: "/icon/sensor.png",
-            iconBgColor: "#E3F2FD" // Info color
-        },
-        {
-            title: "Health Status: Stable",
-            description: "Weekly AI analysis complete. Plant shows high adaptation to current light levels.",
-            timestamp: "2 days ago",
-            iconUrl: "/icon/protect.png",
-            iconBgColor: "#F3E5F5" // Status update color
-        }
-    ];
+    const timelineData = mockTimelineData;
 
     return (
         <>
@@ -86,13 +34,13 @@ export default function Timeline(){
                                 </div>
                             </div>
                             <div className={styles.chartWrapper}>
-                                <LineChartGraph 
-                                    data={healthHistoryData} 
-                                    labelX="Day" 
-                                    labelY="Health (%)" 
+                                <AreaChartGraph
+                                    data={timelineData.healthHistory}
+                                    xAxisLabel="Day"
+                                    yAxisLabel="Health (%)"
                                     domain={[0, 100]}
-                                    strokColor="#10b981" // Dark green
-                                    fillColor="rgba(16, 185, 129, 0.1)" // Light green background
+                                    strokeColor="#10b981"
+                                    fillColor="rgba(16, 185, 129, 0.1)"
                                 />
                             </div>
                         </section>
@@ -106,18 +54,12 @@ export default function Timeline(){
                                 </h2>
                             </div>
                             <div className={styles.statsList}>
-                                <div className={`${styles.statItem} ${styles.moisture}`}>
-                                    <span className={styles.statLabel}>Avg. Moisture</span>
-                                    <span className={styles.statValue}>64%</span>
-                                </div>
-                                <div className={`${styles.statItem} ${styles.sunlight}`}>
-                                    <span className={styles.statLabel}>Sunlight</span>
-                                    <span className={styles.statValue}>52.4 hrs</span>
-                                </div>
-                                <div className={`${styles.statItem} ${styles.growth}`}>
-                                    <span className={styles.statLabel}>Growth</span>
-                                    <span className={styles.statValue}>+1.2 cm</span>
-                                </div>
+                                {timelineData.weeklyStats.map((stat) => (
+                                    <div className={`${styles.statItem} ${styles[stat.themeClass]}`} key={stat.key}>
+                                        <span className={styles.statLabel}>{stat.label}</span>
+                                        <span className={styles.statValue}>{stat.value}</span>
+                                    </div>
+                                ))}
                             </div>
                         </section>
                     </div>
@@ -135,14 +77,14 @@ export default function Timeline(){
                         </div>
 
                         <div className={styles.feedList}>
-                            {eventLogs.map((item, index) => (
+                            {timelineData.eventLogs.map((item) => (
                                 <TimelineItem 
-                                    key={index}
+                                    key={`${item.title}-${item.timestampLabel}`}
                                     title={item.title}
-                                    description={item.description}
-                                    timestamp={item.timestamp}
-                                    iconUrl={item.iconUrl}
-                                    iconBgColor={item.iconBgColor}
+                                    description={item.description ?? ""}
+                                    timestampLabel={item.timestampLabel}
+                                    iconPath={item.iconPath ?? "/icon/info.png"}
+                                    iconBackgroundColor={item.iconBackgroundColor ?? "#E3F2FD"}
                                 />
                             ))}
                         </div>

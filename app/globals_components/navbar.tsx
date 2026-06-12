@@ -2,7 +2,7 @@
 import styles from "./navbar.module.css"
 import { useRouter } from 'next/navigation'
 interface Props{
-    focus : "dashboard" | "sensor" | "timeline" | "plantInfo"
+    focus : "dashboard" | "sensors" | "timeline" | "plantInfo"
 }
 
 
@@ -10,8 +10,8 @@ export default function Navbar({focus} : Props) {
 
     const router = useRouter()
 
-    const hanelclick = (value : string)=>{
-        if(value == "dashboard"){
+    const handleNavigation = (value : string)=>{
+        if(value === "dashboard"){
             router.push(`/`)
             return;
         }
@@ -26,19 +26,19 @@ export default function Navbar({focus} : Props) {
         </section>
         <section className={styles.navbarList}>
             <ul>
-                <li className={focus == "dashboard" ? styles.focus : ""} onClick={ () => hanelclick("dashboard")}>
+                <li className={focus === "dashboard" ? styles.focus : ""} onClick={ () => handleNavigation("dashboard")}>
                     <img src="/icon/dashboard.png" alt="dashboard-icon-img" />
                     <p>Dashboard</p>
                 </li>
-                <li className={focus == "sensor" ? styles.focus : ""} onClick={ () => hanelclick("sensors")}>
+                <li className={focus === "sensors" ? styles.focus : ""} onClick={ () => handleNavigation("sensors")}>
                     <img src="/icon/sensor.png" alt="dashboard-icon-img" />
                     <p>Sensors</p>
                 </li>
-                <li className={focus == "timeline" ? styles.focus : ""} onClick={ () => hanelclick("timeline")}>
+                <li className={focus === "timeline" ? styles.focus : ""} onClick={ () => handleNavigation("timeline")}>
                     <img src="/icon/clock.png" alt="dashboard-icon-img" />
                     <p>Timeline</p>
                 </li>
-                <li className={focus == "plantInfo" ? styles.focus : ""} onClick={ () => hanelclick("plantInfo")}>
+                <li className={focus === "plantInfo" ? styles.focus : ""} onClick={ () => handleNavigation("plantInfo")}>
                     <img src="/icon/info.png" alt="dashboard-icon-img" />
                     <p>Plant info</p>
                 </li>
