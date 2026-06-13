@@ -2,13 +2,15 @@ import styles from "./page.module.css"
 import Navbar from "../globals_components/navbar"
 import FooterNav from "../globals_components/footer"
 
-import { sensorMetrics } from "../data/mock_data"
+import { getSensorMetrics } from "../data/dashboard_data"
 import AreaChartGraph from "./components/area_chart"
 import SensorCard from "./components/sensor_card"
 
 import Title from "./components/title"
 
-export default function SensorsPage(){
+export default async function SensorsPage(){
+    const sensorMetrics = await getSensorMetrics();
+
     return (
     <>
         <Navbar focus={"sensors"}></Navbar>

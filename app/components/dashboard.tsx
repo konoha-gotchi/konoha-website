@@ -1,6 +1,13 @@
-import { mockDashboardData } from "../data/mock_data";
 import styles from "./dashboard.module.css";
-import type { SensorMetricLevel, SensorMetricSummary } from "../types/plant";
+import type {
+    DashboardData,
+    SensorMetricLevel,
+    SensorMetricSummary,
+} from "../types/plant";
+
+interface DashboardGridProps {
+    dashboardData: DashboardData;
+}
 
 const statusClassByLevel: Record<SensorMetricLevel, string> = {
     Low: styles.colorLow,
@@ -13,8 +20,7 @@ const formatMetricValue = (metric: SensorMetricSummary) => {
     return `${metric.value}${separator}${metric.unit}`;
 };
 
-export default function DashboardGrid() {
-    const dashboardData = mockDashboardData;
+export default function DashboardGrid({ dashboardData }: DashboardGridProps) {
     const displayedMetrics = dashboardData.sensorMetrics.slice(0, 4);
 
     const strokeDasharray = 251.3;
