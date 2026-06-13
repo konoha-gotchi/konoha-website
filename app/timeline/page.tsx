@@ -2,12 +2,12 @@ import styles from "./page.module.css"
 import Navbar from "../globals_components/navbar"
 import FooterNav from "../globals_components/footer"
 
-import { mockTimelineData } from "../data/mock_data"
+import { getTimelineData } from "../data/dashboard_data"
 import AreaChartGraph from "../sensors/components/area_chart"
 import TimelineItem from "./components/timeline_item"
 
-export default function Timeline(){
-    const timelineData = mockTimelineData;
+export default async function Timeline(){
+    const timelineData = await getTimelineData();
 
     return (
         <>

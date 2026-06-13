@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-M2: Replaceable local data layer
+M2: Replaceable local data layer is implemented and ready for review.
 
 Active plan: none
 
@@ -16,14 +16,15 @@ Active plan: none
 - Shared TypeScript data types exist for plant profile, sensor readings, care advice, activity items, and AI reports.
 - Dashboard, sensors, plant info, and timeline pages use centralized typed mock data.
 - Typo-like and inconsistent data names have been standardized.
+- Replaceable local dashboard data access functions wrap typed mock data for all dashboard routes.
+- `npm run build` passes after the local data layer change.
 
 ## Not yet done
 
-- Add a replaceable local dashboard data layer.
 - Draft Supabase schema proposal.
 - Connect dashboard to real Supabase data.
 - Add Gemini server-side report generation.
 
 ## Next recommended step
 
-Add a small dashboard data access function that returns typed mock data now and can later be replaced by Supabase reads.
+Review the M2 local data layer, then draft the Supabase schema proposal after confirmation.

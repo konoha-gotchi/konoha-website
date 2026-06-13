@@ -1,7 +1,7 @@
 import styles from "./page.module.css"
 import Navbar from "../globals_components/navbar"
 import FooterNav from "../globals_components/footer"
-import { mockPlantInfoData } from "../data/mock_data";
+import { getPlantInfoData } from "../data/dashboard_data";
 
 
 import ConditionCard from './components/condition_card';
@@ -11,8 +11,8 @@ import GuidelineItem from './components/guideline_item';
  * Plant Info Page
  * Displays detailed plant information, optimal conditions, and care guidelines.
  */
-export default function PlantInfo() {
-    const plantInfoData = mockPlantInfoData;
+export default async function PlantInfo() {
+    const plantInfoData = await getPlantInfoData();
 
     return (
         <>
