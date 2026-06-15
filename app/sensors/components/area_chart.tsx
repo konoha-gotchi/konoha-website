@@ -1,22 +1,18 @@
 "use client"
-import styles from "./line_chart.module.css"
-import { AreaChart, Area , XAxis, YAxis, CartesianGrid, Tooltip, Legend ,ResponsiveContainer} from 'recharts';
+import { AreaChart, Area , XAxis, YAxis, CartesianGrid, Tooltip ,ResponsiveContainer} from 'recharts';
+import type { SensorHistoryPoint } from "@/app/types/plant";
 
-interface DataItem{
-    x : string,
-    y : number
-}
-interface LineChartProps {
-  data?: DataItem[];
-  labelX? : string;
-  labelY? : string;
+interface AreaChartProps {
+  data?: SensorHistoryPoint[];
+  xAxisLabel? : string;
+  yAxisLabel? : string;
   domain?: [number, number];
-  strokColor? : string;
+  strokeColor? : string;
   fillColor? : string;
 }
 
 
- const mockData : DataItem[]= [
+ const defaultChartData : SensorHistoryPoint[]= [
   {
     x: 'Page A',
     y: 600,
@@ -42,8 +38,8 @@ interface LineChartProps {
     y: 90,
   },
 ];
-export default function LineChartGraph( { data = mockData ,labelX = "Label-X", labelY = "Label-Y"
-    , domain = [0,100], strokColor = "#FFB433", fillColor ="#FCCD2A" }: LineChartProps,  ){
+export default function AreaChartGraph( { data = defaultChartData ,xAxisLabel = "Label-X", yAxisLabel = "Label-Y"
+    , domain = [0,100], strokeColor = "#FFB433", fillColor ="#FCCD2A" }: AreaChartProps,  ){
 
 
     return(
@@ -66,7 +62,7 @@ export default function LineChartGraph( { data = mockData ,labelX = "Label-X", l
                         tickLine={false}
                         dy={10}
                         label={{  
-                        value: labelX,
+                        value: xAxisLabel,
                         position: 'insideBottom',
                         className: 'x-axis-label',
                         offset : -20
@@ -79,7 +75,7 @@ export default function LineChartGraph( { data = mockData ,labelX = "Label-X", l
                         tickLine={false}
                         dx={-5}
                         label={{  
-                        value: labelY,
+                        value: yAxisLabel,
                         angle: -90, 
                         position: 'insideLeft',
                         className: 'y-axis-label',
@@ -88,7 +84,7 @@ export default function LineChartGraph( { data = mockData ,labelX = "Label-X", l
                         }}
                     />
                     <Tooltip />
-                    <Area type="monotone" dataKey="y" stroke={strokColor} fill={fillColor} 
+                    <Area type="monotone" dataKey="y" stroke={strokeColor} fill={fillColor}
                         strokeWidth={3} dot = {true} dy={10}
                     />
                 </AreaChart>

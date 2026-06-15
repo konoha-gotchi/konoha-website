@@ -3,18 +3,18 @@ import styles from '../page.module.css';
 
 interface ConditionCardProps {
     title: string;
-    iconUrl: string;
+    iconPath: string;
     range: string;
     label: string;
-    themeClass: string; // e.g., moistureCard, sunlightCard
+    themeClass: string;
 }
 
-const ConditionCard: React.FC<ConditionCardProps> = ({ title, iconUrl, range, label, themeClass }) => {
+const ConditionCard: React.FC<ConditionCardProps> = ({ title, iconPath, range, label, themeClass }) => {
     return (
         <div className={`${styles.conditionCard} ${styles[themeClass]}`}>
             <div className={styles.conditionHeader}>
                 <div className={styles.iconBox}>
-                    <img src={iconUrl} alt={title} />
+                    <img src={iconPath} alt={title} />
                 </div>
                 <span className={styles.conditionTitle}>{title}</span>
             </div>

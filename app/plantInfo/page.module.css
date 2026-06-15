@@ -193,8 +193,8 @@
 .moistureCard { background-color: #eff6ff; color: #1d4ed8; }
 .moistureCard .iconBox { background-color: #dbeafe; }
 
-.sunlightCard { background-color: #fffbeb; color: #b45309; }
-.sunlightCard .iconBox { background-color: #fef3c7; }
+.lightCard { background-color: #fffbeb; color: #b45309; }
+.lightCard .iconBox { background-color: #fef3c7; }
 
 .tempCard { background-color: #fef2f2; color: #b91c1c; }
 .tempCard .iconBox { background-color: #fee2e2; }

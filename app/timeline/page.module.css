@@ -125,7 +125,7 @@
 }
 
 .moisture { background-color: #eff6ff; color: #1d4ed8; }
-.sunlight { background-color: #f5f3ff; color: #6d28d9; }
+.lightExposure { background-color: #f5f3ff; color: #6d28d9; }
 .growth { background-color: #f0fdf4; color: #15803d; }
 
 /* Activity Feed Styles */
