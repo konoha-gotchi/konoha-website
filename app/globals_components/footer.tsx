@@ -2,7 +2,7 @@
 import styles from "./footer.module.css"
 import { useRouter } from 'next/navigation'
 interface Props{
-    focus : "dashboard" | "sensor" | "timeline" | "plantInfo"
+    focus : "dashboard" | "sensor" | "timeline" | "plantInfo" | "chat"
 }
 
 export default function FooterNav({focus} : Props){
@@ -32,6 +32,10 @@ export default function FooterNav({focus} : Props){
                     <li className={focus == "plantInfo" ? styles.focus : ""} onClick={ () => hanelclick("plantInfo")}>
                         <img src="/icon/sensor.png" alt="info-icon" />
                         <p>Plant info</p>
+                    </li>
+                    <li className={focus == "chat" ? styles.focus : ""} onClick={ () => hanelclick("chat")}>
+                        <img src="/icon/chat.png" alt="chat-icon" />
+                        <p>Chat</p>
                     </li>
                 </ul>
             </footer>
