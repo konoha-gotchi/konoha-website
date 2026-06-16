@@ -475,11 +475,32 @@ function mapHealthHistory(
     });
 }
 
+function calculateLightExposureHours(readings: SensorReadingRow[]) {
+    const chronologicalReadings = [...readings]
+        .map((reading) => ({
+            timestampMs: new Date(reading.timestamp).getTime(),
+            lightLux: toNumber(reading.light_lux),
+        }))
+        .filter((reading) => Number.isFinite(reading.timestampMs))
+        .sort((left, right) => left.timestampMs - right.timestampMs);
+
+    return chronologicalReadings.reduce((totalHours, reading, index) => {
+        const nextReading = chronologicalReadings[index + 1];
+
+        if (!nextReading || reading.lightLux < 100) {
+            return totalHours;
+        }
+
+        const intervalHours = (nextReading.timestampMs - reading.timestampMs) / (1000 * 60 * 60);
+        return intervalHours > 0 ? totalHours + intervalHours : totalHours;
+    }, 0);
+}
+
 function mapWeeklyStats(readings: SensorReadingRow[]): WeeklyStat[] {
     const averageMoisture =
         readings.reduce((total, reading) => total + toNumber(reading.soil_moisture_percent), 0) /
         readings.length;
-    const lightExposureHours = readings.filter((reading) => toNumber(reading.light_lux) >= 100).length * 2;
+    const lightExposureHours = calculateLightExposureHours(readings);
 
     return [
         {
@@ -552,6 +573,7 @@ async function loadDashboardDataset(): Promise<DashboardDataset> {
                 "id, plant_id, device_id, timestamp, soil_moisture_raw, soil_moisture_percent, temperature_c, humidity_percent, light_lux, sensor_status, battery_or_power_status, notes",
             )
             .eq("plant_id", plantId)
+            .eq("device_id", device.device_id)
             .order("timestamp", { ascending: false })
             .limit(24),
         supabase
