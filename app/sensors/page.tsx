@@ -8,6 +8,8 @@ import SensorCard from "./components/sensor_card"
 
 import Title from "./components/title"
 
+export const dynamic = "force-dynamic";
+
 export default async function SensorsPage(){
     const sensorMetrics = await getSensorMetrics();
 

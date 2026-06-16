@@ -77,6 +77,11 @@
     color: white;
 }
 
+.high{
+    background-color: #fed7aa;
+    color: #9a3412;
+}
+
 @media (min-width : 768px) {
     .mainCard{
         width: 270px;
