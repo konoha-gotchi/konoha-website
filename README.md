@@ -1,5 +1,13 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Konoha-Gotchi Dashboard
+
+This repository owns only the web dashboard for the Konoha-gotchi smart plant pot prototype. ESP32 firmware and Raspberry Pi gateway code live outside this repository.
+
+Supabase access is server-only. Configure `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, and `KONOHA_INGESTION_TOKEN` in `.env.local` for local development or in Vercel Project Settings > Environment Variables for deployments. Do not create `NEXT_PUBLIC_SUPABASE_*` variables.
+
+See [docs/supabase.md](docs/supabase.md) for the schema migration location, Vercel env setup, and Raspberry Pi ingestion endpoint contract.
+
 ## Getting Started
 
 First, run the development server:
