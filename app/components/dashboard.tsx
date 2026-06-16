@@ -13,6 +13,7 @@ const statusClassByLevel: Record<SensorMetricLevel, string> = {
     Low: styles.colorLow,
     Normal: styles.colorNormal,
     Good: styles.colorGood,
+    High: styles.colorHigh,
 };
 
 const formatMetricValue = (metric: SensorMetricSummary) => {

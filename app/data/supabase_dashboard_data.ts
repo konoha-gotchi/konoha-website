@@ -132,6 +132,17 @@ interface DashboardDataset {
     activityEvents: ActivityEventRow[];
 }
 
+interface ActiveDeviceDataset {
+    supabase: ReturnType<typeof getSupabaseServerClient>;
+    device: DeviceRow;
+    plantId: string;
+}
+
+interface SensorMetricsDataset {
+    readings: SensorReadingRow[];
+    thresholds: MetricThresholdRow[];
+}
+
 const metricPresentation: Record<
     SensorMetricKey,
     {
@@ -297,7 +308,7 @@ function levelForMetric(value: number, threshold: MetricThresholdRow): SensorMet
     }
 
     if (value > max) {
-        return "Normal";
+        return "High";
     }
 
     return threshold.metric_key === "temperature" ? "Normal" : "Good";
@@ -525,21 +536,8 @@ function mapWeeklyStats(readings: SensorReadingRow[]): WeeklyStat[] {
 }
 
 async function loadDashboardDataset(): Promise<DashboardDataset> {
-    const supabase = getSupabaseServerClient();
-    const deviceId = getDefaultDeviceId();
+    const { supabase, device, plantId } = await loadActiveDeviceDataset();
 
-    const deviceResult = (await supabase
-        .from("devices")
-        .select("plant_id, device_id, is_active")
-        .eq("device_id", deviceId)
-        .maybeSingle()) as SupabaseResult<DeviceRow>;
-    const device = requireResult(deviceResult, `device ${deviceId}`);
-
-    if (!device.is_active) {
-        throw new Error(`Konoha device ${device.device_id} is inactive.`);
-    }
-
-    const plantId = device.plant_id;
     const [
         plantResult,
         factsResult,
@@ -629,6 +627,53 @@ async function loadDashboardDataset(): Promise<DashboardDataset> {
     };
 }
 
+async function loadActiveDeviceDataset(): Promise<ActiveDeviceDataset> {
+    const supabase = getSupabaseServerClient();
+    const deviceId = getDefaultDeviceId();
+
+    const deviceResult = (await supabase
+        .from("devices")
+        .select("plant_id, device_id, is_active")
+        .eq("device_id", deviceId)
+        .maybeSingle()) as SupabaseResult<DeviceRow>;
+    const device = requireResult(deviceResult, `device ${deviceId}`);
+
+    if (!device.is_active) {
+        throw new Error(`Konoha device ${device.device_id} is inactive.`);
+    }
+
+    const plantId = device.plant_id;
+    return { supabase, device, plantId };
+}
+
+async function loadSensorMetricsDataset(): Promise<SensorMetricsDataset> {
+    const { supabase, device, plantId } = await loadActiveDeviceDataset();
+    const [
+        readingsResult,
+        thresholdsResult,
+    ] = await Promise.all([
+        supabase
+            .from("sensor_readings")
+            .select(
+                "id, plant_id, device_id, timestamp, soil_moisture_raw, soil_moisture_percent, temperature_c, humidity_percent, light_lux, sensor_status, battery_or_power_status, notes",
+            )
+            .eq("plant_id", plantId)
+            .eq("device_id", device.device_id)
+            .order("timestamp", { ascending: false })
+            .limit(24),
+        supabase
+            .from("metric_thresholds")
+            .select("metric_key, display_title, unit, optimal_min, optimal_max, display_range")
+            .eq("plant_id", plantId)
+            .order("sort_order", { ascending: true }),
+    ]);
+
+    return {
+        readings: requireRows(readingsResult as SupabaseResult<SensorReadingRow[]>, "sensor readings"),
+        thresholds: requireRows(thresholdsResult as SupabaseResult<MetricThresholdRow[]>, "metric thresholds"),
+    };
+}
+
 export async function getSupabaseDashboardData(): Promise<DashboardData> {
     const data = await loadDashboardDataset();
     const latestReading = data.readings[0];
@@ -650,7 +695,7 @@ export async function getSupabaseDashboardData(): Promise<DashboardData> {
 }
 
 export async function getSupabaseSensorMetrics(): Promise<SensorMetricSummary[]> {
-    const data = await loadDashboardDataset();
+    const data = await loadSensorMetricsDataset();
     return mapSensorMetrics(data.readings, data.thresholds);
 }
 
