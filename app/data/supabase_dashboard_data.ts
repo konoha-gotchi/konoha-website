@@ -150,6 +150,13 @@ interface SensorMetricsDataset {
     thresholds: MetricThresholdRow[];
 }
 
+interface PlantInfoDataset {
+    plant: PlantRow;
+    facts: PlantFactRow[];
+    thresholds: MetricThresholdRow[];
+    careGuidelines: CareGuidelineRow[];
+}
+
 const metricPresentation: Record<
     SensorMetricKey,
     {
@@ -695,6 +702,44 @@ async function loadSensorMetricsDataset(): Promise<SensorMetricsDataset> {
     };
 }
 
+async function loadPlantInfoDataset(): Promise<PlantInfoDataset> {
+    const { supabase, plantId } = await loadActiveDeviceDataset();
+    const [
+        plantResult,
+        factsResult,
+        thresholdsResult,
+        guidelinesResult,
+    ] = await Promise.all([
+        supabase
+            .from("plants")
+            .select("id, name, species, description, image_path")
+            .eq("id", plantId)
+            .maybeSingle(),
+        supabase
+            .from("plant_facts")
+            .select("label, value")
+            .eq("plant_id", plantId)
+            .order("sort_order", { ascending: true }),
+        supabase
+            .from("metric_thresholds")
+            .select("metric_key, display_title, unit, optimal_min, optimal_max, display_range")
+            .eq("plant_id", plantId)
+            .order("sort_order", { ascending: true }),
+        supabase
+            .from("care_guidelines")
+            .select("title, body")
+            .eq("plant_id", plantId)
+            .order("sort_order", { ascending: true }),
+    ]);
+
+    return {
+        plant: requireResult(plantResult as SupabaseResult<PlantRow>, "plant profile"),
+        facts: requireRows(factsResult as SupabaseResult<PlantFactRow[]>, "plant profile facts"),
+        thresholds: requireRows(thresholdsResult as SupabaseResult<MetricThresholdRow[]>, "metric thresholds"),
+        careGuidelines: requireRows(guidelinesResult as SupabaseResult<CareGuidelineRow[]>, "care guidelines"),
+    };
+}
+
 export async function getSupabaseDashboardData(): Promise<DashboardData> {
     const data = await loadDashboardDataset();
     const latestReading = data.readings[0];
@@ -721,7 +766,7 @@ export async function getSupabaseSensorMetrics(): Promise<SensorMetricSummary[]>
 }
 
 export async function getSupabasePlantInfoData(): Promise<PlantInfoData> {
-    const { data } = await loadCoreDashboardContext();
+    const data = await loadPlantInfoDataset();
 
     return {
         plant: mapPlantProfile(data.plant, data.facts),
