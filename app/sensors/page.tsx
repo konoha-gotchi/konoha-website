@@ -13,7 +13,7 @@ export default async function SensorsPage(){
 
     return (
     <>
-        <Navbar focus={"sensor"}></Navbar>
+        <Navbar focus={"sensors"}></Navbar>
         <main className = {styles.main}>
             <section className = {styles.mainContainer}>
                 <Title></Title>
@@ -57,7 +57,7 @@ export default async function SensorsPage(){
                 </div>
             </section>
         </main>
-        <FooterNav focus={"sensor"}></FooterNav>
+        <FooterNav focus={"sensors"}></FooterNav>
     </>
     )
 }
