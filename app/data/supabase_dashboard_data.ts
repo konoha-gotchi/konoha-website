@@ -157,6 +157,12 @@ interface PlantInfoDataset {
     careGuidelines: CareGuidelineRow[];
 }
 
+interface TimelineDataset {
+    readings: SensorReadingRow[];
+    healthSnapshots: HealthSnapshotRow[];
+    activityEvents: ActivityEventRow[];
+}
+
 const metricPresentation: Record<
     SensorMetricKey,
     {
@@ -740,6 +746,43 @@ async function loadPlantInfoDataset(): Promise<PlantInfoDataset> {
     };
 }
 
+async function loadTimelineDataset(): Promise<TimelineDataset> {
+    const { supabase, device, plantId } = await loadActiveDeviceDataset();
+    const [
+        readingsResult,
+        healthResult,
+        activityResult,
+    ] = await Promise.all([
+        supabase
+            .from("sensor_readings")
+            .select(
+                "id, plant_id, device_id, timestamp, soil_moisture_raw, soil_moisture_percent, temperature_c, humidity_percent, light_lux, sensor_status, battery_or_power_status, notes",
+            )
+            .eq("plant_id", plantId)
+            .eq("device_id", device.device_id)
+            .order("timestamp", { ascending: false })
+            .limit(24),
+        supabase
+            .from("plant_health_snapshots")
+            .select("plant_status, plant_hp_percent, mood_emoji, mood_label, mood_description, generated_at")
+            .eq("plant_id", plantId)
+            .order("generated_at", { ascending: false })
+            .limit(7),
+        supabase
+            .from("activity_events")
+            .select("title, description, icon_path, icon_background_color, occurred_at")
+            .eq("plant_id", plantId)
+            .order("occurred_at", { ascending: false })
+            .limit(20),
+    ]);
+
+    return {
+        readings: requireRows(readingsResult as SupabaseResult<SensorReadingRow[]>, "sensor readings"),
+        healthSnapshots: requireRows(healthResult as SupabaseResult<HealthSnapshotRow[]>, "health snapshots"),
+        activityEvents: requireRows(activityResult as SupabaseResult<ActivityEventRow[]>, "activity events"),
+    };
+}
+
 export async function getSupabaseDashboardData(): Promise<DashboardData> {
     const data = await loadDashboardDataset();
     const latestReading = data.readings[0];
@@ -776,7 +819,7 @@ export async function getSupabasePlantInfoData(): Promise<PlantInfoData> {
 }
 
 export async function getSupabaseTimelineData(): Promise<TimelineData> {
-    const { data } = await loadCoreDashboardContext();
+    const data = await loadTimelineDataset();
 
     return {
         healthHistory: mapHealthHistory(data.readings, data.healthSnapshots),
