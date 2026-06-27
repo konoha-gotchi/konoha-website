@@ -8,7 +8,7 @@ export type PlantStatus =
 
 export type SensorStatus = "ok" | "warning" | "error" | "offline";
 
-export type SensorMetricLevel = "Low" | "Normal" | "Good";
+export type SensorMetricLevel = "Low" | "Normal" | "Good" | "High";
 
 export type SensorMetricKey =
     | "soil_moisture"

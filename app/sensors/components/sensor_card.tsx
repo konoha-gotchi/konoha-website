@@ -28,8 +28,14 @@ export default function SensorCard({
             : "decrease";
 
     const changeLabel = changePercentFromPrevious === 0
-        ? "Stable today"
-        : `${changePercentFromPrevious > 0 ? "+" : "-"}${Math.abs(changePercentFromPrevious)}% from yesterday`;
+        ? "Stable since last reading"
+        : `${changePercentFromPrevious > 0 ? "+" : "-"}${Math.abs(changePercentFromPrevious)}% from last reading`;
+    const statusClassByLevel: Record<SensorMetricLevel, string> = {
+        Good: styles.good,
+        Low: styles.low,
+        Normal: styles.normal,
+        High: styles.high,
+    };
 
     return (
         <>
@@ -38,7 +44,7 @@ export default function SensorCard({
                     <div className={styles.imgContainer} style={{backgroundColor : accentColor}}>
                         <img src= {iconPath} alt="" />
                     </div>
-                    <div className={`${styles.status} ${level === "Good" ? styles.good : level === "Low" ? styles.low : styles.normal}  `}>
+                    <div className={`${styles.status} ${statusClassByLevel[level]}`}>
                         <p >{level}</p>
                     </div>
                 </div>

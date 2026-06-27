@@ -8,12 +8,14 @@ import SensorCard from "./components/sensor_card"
 
 import Title from "./components/title"
 
+export const dynamic = "force-dynamic";
+
 export default async function SensorsPage(){
     const sensorMetrics = await getSensorMetrics();
 
     return (
     <>
-        <Navbar focus={"sensor"}></Navbar>
+        <Navbar focus={"sensors"}></Navbar>
         <main className = {styles.main}>
             <section className = {styles.mainContainer}>
                 <Title></Title>
@@ -57,7 +59,7 @@ export default async function SensorsPage(){
                 </div>
             </section>
         </main>
-        <FooterNav focus={"sensor"}></FooterNav>
+        <FooterNav focus={"sensors"}></FooterNav>
     </>
     )
 }

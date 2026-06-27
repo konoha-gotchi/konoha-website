@@ -2,7 +2,7 @@
 import styles from "./navbar.module.css"
 import { useRouter } from 'next/navigation'
 interface Props{
-    focus : "dashboard" | "sensor" | "timeline" | "plantInfo" | "chat"
+    focus : "dashboard" | "sensors" | "timeline" | "plantInfo"
 }
 
 
@@ -30,7 +30,7 @@ export default function Navbar({focus} : Props) {
                     <img src="/icon/dashboard.png" alt="dashboard-icon-img" />
                     <p>Dashboard</p>
                 </li>
-                <li className={focus === "sensor" ? styles.focus : ""} onClick={ () => handleNavigation("sensors")}>
+                <li className={focus === "sensors" ? styles.focus : ""} onClick={ () => handleNavigation("sensors")}>
                     <img src="/icon/sensor.png" alt="dashboard-icon-img" />
                     <p>Sensors</p>
                 </li>
@@ -41,10 +41,6 @@ export default function Navbar({focus} : Props) {
                 <li className={focus === "plantInfo" ? styles.focus : ""} onClick={ () => handleNavigation("plantInfo")}>
                     <img src="/icon/info.png" alt="dashboard-icon-img" />
                     <p>Plant info</p>
-                </li>
-                <li className={focus == "chat" ? styles.focus : ""} onClick={ () => handleNavigation("chat")}>
-                    <img src="/icon/chat.png" alt="chat-icon-img" />
-                    <p>Chat</p>
                 </li>
             </ul>
         </section>
