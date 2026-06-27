@@ -119,7 +119,7 @@ interface ActivityEventRow {
     occurred_at: string;
 }
 
-interface DashboardDataset {
+interface CoreDashboardDataset {
     plant: PlantRow;
     facts: PlantFactRow[];
     tags: PlantTagRow[];
@@ -127,15 +127,22 @@ interface DashboardDataset {
     healthSnapshots: HealthSnapshotRow[];
     thresholds: MetricThresholdRow[];
     careGuidelines: CareGuidelineRow[];
+    activityEvents: ActivityEventRow[];
+}
+
+interface DashboardDataset extends CoreDashboardDataset {
     careAdvice: CareAdviceRow;
     aiReport: AiReportRow;
-    activityEvents: ActivityEventRow[];
 }
 
 interface ActiveDeviceDataset {
     supabase: ReturnType<typeof getSupabaseServerClient>;
     device: DeviceRow;
     plantId: string;
+}
+
+interface CoreDashboardContext extends ActiveDeviceDataset {
+    data: CoreDashboardDataset;
 }
 
 interface SensorMetricsDataset {
@@ -535,7 +542,7 @@ function mapWeeklyStats(readings: SensorReadingRow[]): WeeklyStat[] {
     ];
 }
 
-async function loadDashboardDataset(): Promise<DashboardDataset> {
+async function loadCoreDashboardContext(): Promise<CoreDashboardContext> {
     const { supabase, device, plantId } = await loadActiveDeviceDataset();
 
     const [
@@ -546,8 +553,6 @@ async function loadDashboardDataset(): Promise<DashboardDataset> {
         healthResult,
         thresholdsResult,
         guidelinesResult,
-        adviceResult,
-        reportResult,
         activityResult,
     ] = await Promise.all([
         supabase
@@ -591,6 +596,35 @@ async function loadDashboardDataset(): Promise<DashboardDataset> {
             .eq("plant_id", plantId)
             .order("sort_order", { ascending: true }),
         supabase
+            .from("activity_events")
+            .select("title, description, icon_path, icon_background_color, occurred_at")
+            .eq("plant_id", plantId)
+            .order("occurred_at", { ascending: false })
+            .limit(20),
+    ]);
+
+    return {
+        supabase,
+        device,
+        plantId,
+        data: {
+            plant: requireResult(plantResult as SupabaseResult<PlantRow>, "plant profile"),
+            facts: requireRows(factsResult as SupabaseResult<PlantFactRow[]>, "plant profile facts"),
+            tags: requireRows(tagsResult as SupabaseResult<PlantTagRow[]>, "plant tags"),
+            readings: requireRows(readingsResult as SupabaseResult<SensorReadingRow[]>, "sensor readings"),
+            healthSnapshots: requireRows(healthResult as SupabaseResult<HealthSnapshotRow[]>, "health snapshots"),
+            thresholds: requireRows(thresholdsResult as SupabaseResult<MetricThresholdRow[]>, "metric thresholds"),
+            careGuidelines: requireRows(guidelinesResult as SupabaseResult<CareGuidelineRow[]>, "care guidelines"),
+            activityEvents: requireRows(activityResult as SupabaseResult<ActivityEventRow[]>, "activity events"),
+        },
+    };
+}
+
+async function loadDashboardDataset(): Promise<DashboardDataset> {
+    const { supabase, plantId, data } = await loadCoreDashboardContext();
+
+    const [adviceResult, reportResult] = await Promise.all([
+        supabase
             .from("care_advice")
             .select("title, body, action_label, image_path")
             .eq("plant_id", plantId)
@@ -605,25 +639,12 @@ async function loadDashboardDataset(): Promise<DashboardDataset> {
             .order("generated_at", { ascending: false })
             .limit(1)
             .maybeSingle(),
-        supabase
-            .from("activity_events")
-            .select("title, description, icon_path, icon_background_color, occurred_at")
-            .eq("plant_id", plantId)
-            .order("occurred_at", { ascending: false })
-            .limit(20),
     ]);
 
     return {
-        plant: requireResult(plantResult as SupabaseResult<PlantRow>, "plant profile"),
-        facts: requireRows(factsResult as SupabaseResult<PlantFactRow[]>, "plant profile facts"),
-        tags: requireRows(tagsResult as SupabaseResult<PlantTagRow[]>, "plant tags"),
-        readings: requireRows(readingsResult as SupabaseResult<SensorReadingRow[]>, "sensor readings"),
-        healthSnapshots: requireRows(healthResult as SupabaseResult<HealthSnapshotRow[]>, "health snapshots"),
-        thresholds: requireRows(thresholdsResult as SupabaseResult<MetricThresholdRow[]>, "metric thresholds"),
-        careGuidelines: requireRows(guidelinesResult as SupabaseResult<CareGuidelineRow[]>, "care guidelines"),
+        ...data,
         careAdvice: requireResult(adviceResult as SupabaseResult<CareAdviceRow>, "active care advice"),
         aiReport: requireResult(reportResult as SupabaseResult<AiReportRow>, "AI report placeholder"),
-        activityEvents: requireRows(activityResult as SupabaseResult<ActivityEventRow[]>, "activity events"),
     };
 }
 
@@ -700,7 +721,7 @@ export async function getSupabaseSensorMetrics(): Promise<SensorMetricSummary[]>
 }
 
 export async function getSupabasePlantInfoData(): Promise<PlantInfoData> {
-    const data = await loadDashboardDataset();
+    const { data } = await loadCoreDashboardContext();
 
     return {
         plant: mapPlantProfile(data.plant, data.facts),
@@ -710,7 +731,7 @@ export async function getSupabasePlantInfoData(): Promise<PlantInfoData> {
 }
 
 export async function getSupabaseTimelineData(): Promise<TimelineData> {
-    const data = await loadDashboardDataset();
+    const { data } = await loadCoreDashboardContext();
 
     return {
         healthHistory: mapHealthHistory(data.readings, data.healthSnapshots),
