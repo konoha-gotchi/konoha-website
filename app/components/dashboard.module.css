@@ -236,6 +236,7 @@
 .colorLow { color: #ef4444; }
 .colorGood { color: #10b981; }
 .colorNormal { color: #3b82f6; }
+.colorHigh { color: #f97316; }
 
 /* Activity Log */
 .logList {

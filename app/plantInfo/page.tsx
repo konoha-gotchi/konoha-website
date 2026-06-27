@@ -7,6 +7,8 @@ import { getPlantInfoData } from "../data/dashboard_data";
 import ConditionCard from './components/condition_card';
 import GuidelineItem from './components/guideline_item';
 
+export const dynamic = "force-dynamic";
+
 /**
  * Plant Info Page
  * Displays detailed plant information, optimal conditions, and care guidelines.

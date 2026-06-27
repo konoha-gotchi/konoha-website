@@ -6,6 +6,8 @@ import { getTimelineData } from "../data/dashboard_data"
 import AreaChartGraph from "../sensors/components/area_chart"
 import TimelineItem from "./components/timeline_item"
 
+export const dynamic = "force-dynamic";
+
 export default async function Timeline(){
     const timelineData = await getTimelineData();
 

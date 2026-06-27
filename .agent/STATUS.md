@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-M3: Supabase schema proposal is drafted and ready for review before implementation.
+M4: Supabase server-only data integration implemented, pending Raspberry Pi gateway repository integration.
 
 Active plan: none
 
@@ -19,12 +19,17 @@ Active plan: none
 - Replaceable local dashboard data access functions wrap typed mock data for all dashboard routes.
 - `npm run build` passes after the local data layer change.
 - Supabase schema proposal is drafted in `.agent/SUPABASE_SCHEMA_PROPOSAL.md`.
+- Supabase schema migrations are committed under `supabase/migrations/`.
+- Supabase application tables, RLS, server-only grants, policies, indexes, and seed data are applied.
+- Dashboard data access functions read from Supabase on the server when server env vars are configured.
+- Local mock data fallback remains available only when `KONOHA_USE_MOCK_FALLBACK=true`.
+- Protected Raspberry Pi ingestion endpoint contract exists at `/api/readings/ingest`.
 
 ## Not yet done
 
-- Connect dashboard to real Supabase data.
+- Integrate the separate Raspberry Pi gateway repository with `/api/readings/ingest`.
 - Add Gemini server-side report generation.
 
 ## Next recommended step
 
-Review the Supabase schema proposal, then provide Supabase organization/project access when ready to implement the approved migration.
+Configure Vercel Production and Preview environment variables, then point the separate Raspberry Pi gateway repository at `/api/readings/ingest` with `KONOHA_INGESTION_TOKEN`.
