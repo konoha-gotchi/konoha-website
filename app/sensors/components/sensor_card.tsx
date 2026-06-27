@@ -28,8 +28,8 @@ export default function SensorCard({
             : "decrease";
 
     const changeLabel = changePercentFromPrevious === 0
-        ? "Stable today"
-        : `${changePercentFromPrevious > 0 ? "+" : "-"}${Math.abs(changePercentFromPrevious)}% from yesterday`;
+        ? "Stable since last reading"
+        : `${changePercentFromPrevious > 0 ? "+" : "-"}${Math.abs(changePercentFromPrevious)}% from last reading`;
     const statusClassByLevel: Record<SensorMetricLevel, string> = {
         Good: styles.good,
         Low: styles.low,

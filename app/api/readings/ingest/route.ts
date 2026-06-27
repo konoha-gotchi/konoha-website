@@ -8,6 +8,8 @@ import type { SensorReading, SensorStatus } from "@/app/types/plant";
 export const runtime = "nodejs";
 
 const sensorStatuses = new Set<SensorStatus>(["ok", "warning", "error", "offline"]);
+const isoTimestampPattern =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|([+-])(\d{2}):(\d{2}))$/;
 
 interface IngestPayload extends SensorReading {
     battery_or_power_status?: string;
@@ -50,7 +52,51 @@ function isString(value: unknown): value is string {
 }
 
 function isValidTimestamp(value: string) {
-    return !Number.isNaN(new Date(value).getTime());
+    const match = isoTimestampPattern.exec(value);
+
+    if (!match) {
+        return false;
+    }
+
+    const [
+        ,
+        yearValue,
+        monthValue,
+        dayValue,
+        hourValue,
+        minuteValue,
+        secondValue,
+        offsetSign,
+        offsetHourValue,
+        offsetMinuteValue,
+    ] = match;
+    const year = Number(yearValue);
+    const month = Number(monthValue);
+    const day = Number(dayValue);
+    const hour = Number(hourValue);
+    const minute = Number(minuteValue);
+    const second = Number(secondValue);
+
+    if (month < 1 || month > 12 || hour > 23 || minute > 59 || second > 59) {
+        return false;
+    }
+
+    const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+
+    if (day < 1 || day > daysInMonth) {
+        return false;
+    }
+
+    if (offsetSign) {
+        const offsetHour = Number(offsetHourValue);
+        const offsetMinute = Number(offsetMinuteValue);
+
+        if (offsetHour > 23 || offsetMinute > 59) {
+            return false;
+        }
+    }
+
+    return !Number.isNaN(Date.parse(value));
 }
 
 function validatePayload(value: unknown): { payload: IngestPayload } | { error: string } {
